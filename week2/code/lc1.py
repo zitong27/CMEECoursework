@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+"""Creating lists from *birds* data upon requirements using comprehension and loops."""
+
 birds = [ ('Passerculus sandwichensis','Savannah sparrow',18.7),
           ('Delichon urbica','House martin',19),
           ('Junco phaeonotus','Yellow-eyed junco',19.5),

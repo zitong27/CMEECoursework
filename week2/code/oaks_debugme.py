@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+""" Imports genus and species data, and outputs those that are Oaks to JustOaksData.csv"""
+
 import csv
 import sys
 import doctest

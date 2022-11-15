@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
+"""aligns two DNA sequences, returns the best match,
+ and count the “score” as total of number of bases matched."""
+
+__appname__ = 'align_seqs.py'
 __author__ = 'Zitong Zhao (zitong.zhao22@imperial.ac.uk)'
 __version__ = '0.0.1'
+__license__ = "License for this code/program"
 
 # Two example sequences to match
 seq2 = []

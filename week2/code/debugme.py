@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+"""excercise file for debugging"""
+
 def buggyfunc(x):
     y = x
     for i in range(x):

@@ -1,7 +1,11 @@
+#!/usr/bin/env python3
+
+'''To save an object (even complex) for later use'''
+
 #############################
 # STORING OBJECTS
 #############################
-# To save an object (even complex) for later use
+
 my_dictionary = {"a key": 10, "another key": 11}
 
 import pickle

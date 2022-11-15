@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+'''test on main'''
+
 # Filename: using_name.py
 
 if __name__ == '__main__':

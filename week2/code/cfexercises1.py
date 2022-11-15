@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
+""" Excercise file on python conditions """
+
+__appname__ = 'cfexercises1.py'
 __author__ = 'Zitong Zhao (zitong.zhao22@imperial.ac.uk)'
 __version__ = '0.0.1'
+__license__ = "License for this code/program"
 
 import sys
 
