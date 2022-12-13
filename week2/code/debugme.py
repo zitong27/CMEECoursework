@@ -3,6 +3,7 @@
 """excercise file for debugging"""
 
 def buggyfunc(x):
+    '''debug function'''
     y = x
     for i in range(x):
         try:

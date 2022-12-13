@@ -2,6 +2,7 @@
 
 '''test function'''
 def foo(x):
+    '''calculation'''
     x *= x # same as x = x*x
     print(x)
 
