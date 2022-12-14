@@ -1,16 +1,17 @@
 #!/usr/bin/env Rscript
 
-#Author: Amy Feakes
-#Script: treeheight.R
-#Description: Practical work using functions 
-#Date: Oct 2022
+# Script: treeheight.R
+# Author: Electric Emus (f.ferreira22@imperial.ac.uk, amy.feakes22@imperial.ac.uk, zitong.zhao22@imperial.ac.uk,
+#                        xuanyin.zheng22@imperial.ac.uk, dongxuan.zhu22@imperial.ac.uk)
+# Description: Practical work using functions 
+# Date: Oct 2022
 
 #Clear workspace
 rm(list=ls())
 
 
 ###DESCRIPTION####
-#csv format species name, distance, degrees 
+# csv format species name, distance, degrees 
 # This function calculates heights of trees given distance of each tree 
 # from its base and angle to its top, using  the trigonometric formula 
 #
@@ -25,7 +26,6 @@ rm(list=ls())
 treeheight<- function(degrees, distance) {
     radians <- degrees * pi / 180
     height <- distance * tan(radians)
-    return(height)
 }
 
 #### Command Line parameters#### 
@@ -39,6 +39,9 @@ main <- function () {
     output_filename <- tools::file_path_sans_ext(basename(filename))
     output <- paste("../results/",output_filename,"_TreeHeights.csv", sep = "")
     write.csv(dat, output, row.names = FALSE)
+
+    print("Completed Tree Height Calculation.")
+    print("Data Files found in Results folder!!!")
 }
 
 

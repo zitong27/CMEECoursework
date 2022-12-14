@@ -1,8 +1,10 @@
 #!/bin/bash
-# Author: Zitong Zhao zitong.zhao22@imperial.ac.uk
+
 # Script: run_get_TreeHeight
+# Author: 'Electric Emus (zitong.zhao22@imperial.ac.uk, amy.feakes22@imperial.ac.uk, 
+#                         f.ferreira22@imperial.ac.uk, xuanyin.zheng22@imperial.ac.uk,
+#                         dongxuan.zhu22@imperial.ac.uk)'
 # Description: run the tree file and gain the tree height file
-#
 # Arguments: into space separated values file
 # Date: Dec 2022
 
