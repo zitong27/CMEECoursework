@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+'''The Lotka-Volterra model revisited'''
+
 import numpy as np
 import scipy.integrate as integrate
 import matplotlib.pylab as p
@@ -19,6 +23,8 @@ else:
     K = 100  #resource population’s carrying capacity
 
 def dCR_dt(pops, t=0):
+    ''' growth rate of consumer and resource population 
+    at any given time step'''
     R = pops[0]
     C = pops[1]
     dRdt = r * R * (1 - R / K) - a * R * C 
@@ -33,6 +39,7 @@ RC0 = np.array([R0, C0])
 pops, infodict = integrate.odeint(dCR_dt, RC0, t, full_output=True)
 
 def plot1(t,pops):
+    '''draw plot'''
     f1 = p.figure()
     p.plot(t, pops[:,0], 'g-', label='Resource density') # Plot
     p.plot(t, pops[:,1]  , 'b-', label='Consumer density')
@@ -45,6 +52,7 @@ def plot1(t,pops):
     return 0
 
 def plot2(pops):
+    '''draw plot'''
     f2 = p.figure()
     p.figure
     p.plot(pops[:,0],pops[:,1],'r-')

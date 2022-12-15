@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+'''loops vs. list comprehensions: which is faster?'''
 ##############################################################################
 # loops vs. list comprehensions: which is faster?
 ##############################################################################

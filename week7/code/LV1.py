@@ -1,7 +1,13 @@
+#!/usr/bin/env python3
+
+'''The Lotka-Volterra model'''
+
 import numpy as np
 import scipy.integrate as integrate
 import matplotlib.pylab as p
 def dCR_dt(pops, t=0):
+    ''' growth rate of consumer and resource population 
+    at any given time step'''
     R = pops[0]
     C = pops[1]
     dRdt = r * R - a * R * C 
