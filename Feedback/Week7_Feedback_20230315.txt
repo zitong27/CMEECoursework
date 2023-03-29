@@ -1,0 +1,1011 @@
+Starting code feedback for Zitong, Week7
+
+Current Points = 100
+
+Note that: 
+(1) Major sections begin with a double "====" line 
+(2) Subsections begin with a single "====" line 
+(3) Code output or text file content are printed within single "*****" lines 
+
+======================================================================
+======================================================================
+Your Git repo size this week is about 4.93 MiB on disk 
+
+PART 1: Checking project workflow...
+
+Found the following directories in parent directory: .git, week7, week3, week2, Feedback, miniproject, week1
+
+Found the following files in parent directory: README.md, .gitignore
+
+Checking for key files in parent directory...
+
+Found .gitignore in parent directory, great! 
+
+Printing contents of .gitignore:
+
+**********************************************************************
+*~ 
+*.tmp 
+.DS_Store
+.Rhistory
+
+**********************************************************************
+
+Found README in parent directory, named: README.md
+
+Printing contents of README.md:
+
+**********************************************************************
+# My CMEE Coursework Repository
+
+## Descrption
+
+This repository contains **codes**, **data**, **results** and **sandbox** folders of CMEE Coursework.
+
+## Main content
+- [x] **Week1**
+
+Shell scripts for courseworks in **shell scripting** and scientific documents with **LaTex**.
+<br>
+
+- [x] **Week2**
+
+Biological computing in **Python**.
+<br>
+
+- [x] **Week3**
+
+Biological Computing in **R**.
+<br>
+
+- [x] **Week7**
+
+Biological computing in **Python**.
+**********************************************************************
+
+======================================================================
+Looking for the weekly directories...
+
+Found 4 weekly directories: week1, week2, week3, week7
+
+The Week7 directory will be assessed 
+
+======================================================================
+======================================================================
+PART 2: Checking weekly code and workflow...
+
+======================================================================
+Assessing WEEK7...
+
+Found the following directories: code, sandbox, results, data
+
+Found the following files: README.md
+
+Checking for readme file in weekly directory...
+
+Found README in parent directory, named: README.md
+
+Printing contents of README.md:
+
+**********************************************************************
+# Coursework for CMEE: Week 7
+
+- **blackbirds&#46;py:** Outputting bird's kingdom, phylum and species from dataset using regular expression.
+
+- **fmr.R:** Plots log(field metabolic rate) against log(body mass) for the Nagy et al 1999 dataset to a file fmr.pdf.
+
+- **LV1&#46;py:** Fitting the Lotka-Volterra model and generating population dynamics graphs.
+
+- **LV2&#46;py:** Fitting the Lotka-Volterra model and generating population dynamics graphs with input values from the command line.
+
+- **NC&#46;py:** Script for numerical computing in Python.
+
+- **profileme&#46;py:** Script for using Python profiling to find out what is slowing down the code.
+
+- **profileme2&#46;py:** Script for using Python profiling to find out what is slowing down the code - Converted the loop to a list comprehension, replaced .join with an explicit string concatenation. 
+
+- **Regular_expressions&#46;py:** Script for explaining regular expressions.
+
+- **run_fmr_R&#46;py:** Runs fmr.R to generate the desired result and print to the python screen whether the run was successful, and the contents of the R console output..
+
+- **run_LV&#46;py:** Runs both LV1.py and LV2.py with appropriate arguments.
+
+- **timeitme&#46;py:** Using timeit to test loops vs. list comprehensions: which is faster? 
+
+- **using_os.py:** Use the subprocess.os module to get a list of files and directories from a certain path with or without a given condition.
+
+- **vectorization&#46;py:** Showing the difference in runtime between a loop method and a vectorized method using numpy.
+
+- **workflow&#46;py:** Using Python to build workflows.
+
+**********************************************************************
+
+Results directory is empty - good! 
+
+Found 13 code files: Vectorize2.py, LV1.py, LV2.py, profileme2.py, fmr.R, Vectorize1.py, run_fmr_R.py, profileme.py, Vectorize2.R, CompareSpeed.sh, TestR.R, Vectorize1.R, timeitme.py
+
+======================================================================
+Testing script/code files...
+
+======================================================================
+Inspecting script file Vectorize2.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+"""This script vectorizes stochastic Ricker function under Python."""
+
+
+_appname_ = 'Vectorize2'
+__author__ = 'Electric Emus (amy.feakes22@imperial.ac.uk, f.ferreira22@imperial.ac.uk,\
+                             zitong.zhao22@imperial.ac.uk, xuanyin.zheng22@imperial.ac.uk,\
+                             dongxuan.zhu22@imperial.ac.uk)'
+__version__ = '0.0.1'
+
+#### imports ####
+import numpy as np 
+import timeit
+from math import exp
+ 
+#### functions ####
+def stochrick(p0=np.random.uniform(low=.5,high=1.5,size=1000), r=1.2, K=1, sigma=.2,numyears=100):
+    """An equivalent version of vectorization with pre-allocation in R."""
+    N = np.zeros([numyears,len(p0)])
+    N[0,] = p0
+
+    for pop in range(len(p0)):
+        for yr in range(1,numyears):
+            N[yr,pop] = N[yr-1, pop] * exp(r * (1 - N[yr-1, pop] / K + np.random.normal(0,sigma,1)))
+    
+    return N 
+
+def stochrickForm(p0, pop, numyears, r, K, sigma):
+    """Stochastic Ricker's formula for later application."""
+    N = np.zeros(numyears)
+    N[0] = p0[pop]
+
+    for yr in range(1,numyears):
+        N[yr] = N[yr-1] * exp(r * (1 - N[yr-1] / K) + np.random.normal(0, sigma,1))
+    
+    return N
+
+def stochrickvect(p0=np.random.uniform(low=.5,high=1.5,size=1000), r = 1.2, K = 1, sigma = 0.2,numyears = 100):
+    """An equivalent version of vectorization with sapply in R."""
+    
+    result = [stochrickForm(p0,pop,numyears,r,K,sigma) for pop in np.arange(len(p0))]
+    
+    return result
+
+#### outputs ####
+vect2_time1 = timeit.timeit(stmt='stochrick()',globals = globals(), number=1)
+vect2_time2 = timeit.timeit(stmt='stochrickvect()',globals = globals(), number=1)
+
+print("\nIn python, the original vectorized stochastic Ricker function takes:")
+print(vect2_time1)
+
+print("In python, the modified vectorized stochastic Ricker function takes:")
+print(vect2_time2)
+**********************************************************************
+
+Testing Vectorize2.py...
+
+Vectorize2.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more docstrings and functions
+
+Current Points = 100
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+In python, the original vectorized stochastic Ricker function takes:
+0.5676011889590882
+In python, the modified vectorized stochastic Ricker function takes:
+0.5112270039971918
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 1.23725s
+
+======================================================================
+Inspecting script file LV1.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+'''The Lotka-Volterra model'''
+
+import numpy as np
+import scipy.integrate as integrate
+import matplotlib.pylab as p
+def dCR_dt(pops, t=0):
+    ''' growth rate of consumer and resource population 
+    at any given time step'''
+    R = pops[0]
+    C = pops[1]
+    dRdt = r * R - a * R * C 
+    dCdt = -z * C + e * a * R * C
+    return np.array([dRdt, dCdt])
+
+
+r = 1.
+a = 0.1 
+z = 1.5
+e = 0.75
+t = np.linspace(0, 15, 1000)
+R0 = 10
+C0 = 5 
+RC0 = np.array([R0, C0])
+pops, infodict = integrate.odeint(dCR_dt, RC0, t, full_output=True)
+import matplotlib.pylab as p
+f1 = p.figure()
+p.plot(t, pops[:,0], 'g-', label='Resource density') # Plot
+p.plot(t, pops[:,1]  , 'b-', label='Consumer density')
+p.grid()
+p.legend(loc='best')
+p.xlabel('Time')
+p.ylabel('Population density')
+p.title('Consumer-Resource population dynamics')
+f1.savefig('../results/LV_model.pdf') #Save figure
+
+f2 = p.figure()
+p.figure
+p.plot(pops[:,0],pops[:,1],'r-')
+p.grid()
+p.xlabel('Resource density')
+p.ylabel('Consumer density')
+p.title('Consumer-Resource population dynamics')
+f2.savefig('../results/LV_model2.pdf')
+**********************************************************************
+
+Testing LV1.py...
+
+LV1.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more functions, but completely missing docstrings
+2 pts deducted for missing docstring for script, and .5 pt deducted per missing docstring for function
+
+Current Points = 97.5
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 1.27564s
+
+======================================================================
+Inspecting script file LV2.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+'''The Lotka-Volterra model revisited'''
+
+import numpy as np
+import scipy.integrate as integrate
+import matplotlib.pylab as p
+import sys
+
+
+if len(sys.argv) == 6:
+    r = float(sys.argv[1])
+    K = float(sys.argv[2])
+    a = float(sys.argv[3])
+    z = float(sys.argv[4])
+    e = float(sys.argv[5])  
+else:
+
+    r = 1.    #intrinsic (per-capita) growth rate of the resource population 
+    a = 0.1   #per-capita “search rate” for the resource () multiplied by its attack success probability
+    z = 1.5   #mortality rate
+    e = 0.75  #consumer’s efficiency (a fraction) in converting resource to consumer biomass.
+    K = 100  #resource population’s carrying capacity
+
+def dCR_dt(pops, t=0):
+    ''' growth rate of consumer and resource population 
+    at any given time step'''
+    R = pops[0]
+    C = pops[1]
+    dRdt = r * R * (1 - R / K) - a * R * C 
+    dCdt = -z * C + e * a * R * C
+    return np.array([dRdt, dCdt])
+
+
+t = np.linspace(0, 15, 1000)
+R0 = 10
+C0 = 5 
+RC0 = np.array([R0, C0])
+pops, infodict = integrate.odeint(dCR_dt, RC0, t, full_output=True)
+
+def plot1(t,pops):
+    '''draw plot'''
+    f1 = p.figure()
+    p.plot(t, pops[:,0], 'g-', label='Resource density') # Plot
+    p.plot(t, pops[:,1]  , 'b-', label='Consumer density')
+    p.grid()
+    p.legend(loc='best')
+    p.xlabel('Time')
+    p.ylabel('Population density')
+    p.title('Consumer-Resource population dynamics')
+    f1.savefig('../results/LV2_model.pdf')
+    return 0
+
+def plot2(pops):
+    '''draw plot'''
+    f2 = p.figure()
+    p.figure
+    p.plot(pops[:,0],pops[:,1],'r-')
+    p.grid()
+    p.xlabel('Resource density')
+    p.ylabel('Consumer density')
+    p.title('Consumer-Resource population dynamics')
+    f2.savefig('../results/LV2_model2.pdf')
+    return 0
+
+
+plot1(t,pops)
+plot2(pops)
+
+**********************************************************************
+
+Testing LV2.py...
+
+LV2.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more functions, but completely missing docstrings
+2 pts deducted for missing docstring for script, and .5 pt deducted per missing docstring for function
+
+Current Points = 94.0
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 1.21306s
+
+======================================================================
+Inspecting script file profileme2.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+'''find out what is slowing down the code '''
+def my_squares(iters):
+    '''calculation'''
+    out = [i ** 2 for i in range(iters)]
+    return out
+
+def my_join(iters, string):
+    '''calculation'''
+    out = ''
+    for i in range(iters):
+        out += ", " + string
+    return out
+
+def run_my_funcs(x,y):
+    '''calculation'''
+    print(x,y)
+    my_squares(x)
+    my_join(x,y)
+    return 0
+
+run_my_funcs(10000000,"My string")
+**********************************************************************
+
+Testing profileme2.py...
+
+profileme2.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more functions, but completely missing docstrings
+2 pts deducted for missing docstring for script, and .5 pt deducted per missing docstring for function
+
+Current Points = 90.5
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+10000000 My string
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 3.28365s
+
+======================================================================
+Inspecting script file fmr.R...
+
+File contents are:
+
+**********************************************************************
+# Plots log(field metabolic rate) against log(body mass) for the Nagy et al 
+# 1999 dataset to a file fmr.pdf.
+
+cat("Reading CSV\n")
+
+nagy <- read.csv('../Data/NagyEtAl1999.csv', stringsAsFactors = FALSE)
+
+cat("Creating graph\n")
+pdf('../Results/fmr_plot.pdf', 11, 8.5)
+col <- c(Aves='purple3', Mammalia='red3', Reptilia='green3')
+plot(log10(nagy$M.g), log10(nagy$FMR.kJ.day.1), 
+     pch=19, col=col[nagy$Class], 
+     xlab=~log[10](M), ylab=~log[10](FMR))
+for(class in unique(nagy$Class)){
+    model <- lm(log10(FMR.kJ.day.1) ~ log10(M.g), 
+                data=nagy[nagy$Class==class,])
+    abline(model, col=col[class])
+}
+dev.off()
+
+cat("Finished in R!\n")
+
+
+**********************************************************************
+
+Testing fmr.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+Reading CSV
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in file(file, "rt") : cannot open the connection
+Calls: read.csv -> read.table -> file
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '../Data/NagyEtAl1999.csv': No such file or directory
+Execution halted
+
+======================================================================
+Inspecting script file Vectorize1.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+"""This script compares the speed of loops and in-built vectorized \
+function under Python."""
+
+
+_appname_ = 'Vectorize1'
+__author__ = 'Electric Emus (amy.feakes22@imperial.ac.uk, f.ferreira22@imperial.ac.uk,\
+                             zitong.zhao22@imperial.ac.uk, xuanyin.zheng22@imperial.ac.uk,\
+                             dongxuan.zhu22@imperial.ac.uk)'
+__version__ = '0.0.1'
+
+#### imports ####
+import numpy as np 
+import timeit
+
+
+M = np.random.uniform(size=1000000).reshape(1000,1000)
+
+ 
+#### functions ####
+def SumAllElement(M):
+    """Loop without vectorization."""
+    Dimensions = M.shape
+    Tot = 0
+    for i in range(Dimensions[0]):
+        for j in range(Dimensions[1]):
+            Tot = Tot + M[i,j]
+
+    return Tot
+
+#### outputs ####
+loop_time = timeit.timeit(stmt='SumAllElement(M)',globals = globals(), number=1)
+vect_time = timeit.timeit(stmt='np.sum(M)',globals = globals(), number=1)
+
+print("\nIn python, the sum function using loop takes:")
+print(loop_time)
+
+print("In python, the sum function with in-built vectorization takes:")
+print(vect_time)
+**********************************************************************
+
+Testing Vectorize1.py...
+
+Vectorize1.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more docstrings and functions
+
+Current Points = 90.5
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+In python, the sum function using loop takes:
+0.15380537800956517
+In python, the sum function with in-built vectorization takes:
+0.0005208340007811785
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.31676s
+
+======================================================================
+Inspecting script file run_fmr_R.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+'''print to the python screen whether the run was successful, 
+and the contents of the R console output'''
+import subprocess
+
+subprocess.call(["Rscript", "fmr.R"])
+
+
+p = subprocess.Popen(["Rscript", "fmr.R"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+output, error = p.communicate()
+if p.returncode != 0: 
+   print("\nUnsuccessful!\n %d Error occurred:\n %s" % (p.returncode, error.decode()))
+**********************************************************************
+
+Testing run_fmr_R.py...
+
+run_fmr_R.py is a Python script file;
+
+checking for docstrings...
+
+No functions, but no script-level docstring either
+2 pts deducted
+
+Current Points = 88.5
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+Reading CSV
+
+Unsuccessful!
+ 1 Error occurred:
+ Error in file(file, "rt") : cannot open the connection
+Calls: read.csv -> read.table -> file
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '../Data/NagyEtAl1999.csv': No such file or directory
+Execution halted
+
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in file(file, "rt") : cannot open the connection
+Calls: read.csv -> read.table -> file
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '../Data/NagyEtAl1999.csv': No such file or directory
+Execution halted
+
+======================================================================
+Inspecting script file profileme.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+'''find out what is slowing down the code '''
+def my_squares(iters):
+    '''calculation'''
+    out = []
+    for i in range(iters):
+        out.append(i ** 2)
+    return out
+
+def my_join(iters, string):
+    '''calculation'''
+    out = ''
+    for i in range(iters):
+        out += string.join(", ")
+    return out
+
+def run_my_funcs(x,y):
+    '''calculation'''
+    print(x,y)
+    my_squares(x)
+    my_join(x,y)
+    return 0
+
+run_my_funcs(10000000,"My string")
+**********************************************************************
+
+Testing profileme.py...
+
+profileme.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more functions, but completely missing docstrings
+2 pts deducted for missing docstring for script, and .5 pt deducted per missing docstring for function
+
+Current Points = 85.0
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+10000000 My string
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 4.86673s
+
+======================================================================
+Inspecting script file Vectorize2.R...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/Rscript
+
+# Script: Vectorize1.R
+# Author: Electric Emus (dongxuan.zhu22@imperial.ac.uk, f.ferreira22@imperial.ac.uk, 
+#                        amy.feakes22@imperial.ac.uk, zitong.zhao22@imperial.ac.uk,
+#                        xuanyin.zheng22@imperial.ac.uk)
+# Description: Runs the stochastic Ricker equation with gaussian fluctuations
+# Date: Oct 2022
+
+
+rm(list = ls())
+
+stochrick <- function(p0 = runif(1000, .5, 1.5), r = 1.2, K = 1, sigma = 0.2,numyears = 100)
+{
+#create matrix for nrow=numyears, ncol=length(p0)
+  N <- matrix(NA, numyears, length(p0))  #initialize empty matrix
+  N[1, ] <- p0
+
+  for (pop in 1:length(p0)) { #loop through the populations
+
+    for (yr in 2:numyears){ #for each pop, loop through the years
+
+      N[yr, pop] <- N[yr-1, pop] * exp(r * (1 - N[yr - 1, pop] / K) + rnorm(1, 0, sigma)) # add one fluctuation from normal distribution
+    
+     }
+  
+  }
+  
+ return(N)
+
+}
+
+
+
+# Now write another function called stochrickvect that vectorizes the above to
+# the extent possible, with improved performance: 
+
+stochrickForm <- function(p0, pop, numyears, r, K, sigma) {
+  
+  N <- rep(NA,numyears)
+  N[1] <- p0[pop]
+
+  for (yr in 2:numyears) {   
+    N[yr] <- N[yr-1] * exp(r * (1 - N[yr-1] / K) + rnorm(1, 0, sigma))
+  }
+  return(N)
+}
+
+stochrickvect <- function(p0 = runif(1000, .5, 1.5), r = 1.2, K = 1, sigma = 0.2,numyears = 100) {
+
+  result <- sapply(1:length(p0), function(pop) stochrickForm(p0,pop,numyears,r,K,sigma))
+  
+  return(result)
+}
+
+cat("\nIn R, the original vectorized Stochastic Ricker takes: \n")
+cat(system.time(stochrick())[[3]],"\n")
+
+cat("In R, the modified vectorized Stochastic Ricker takes: \n")
+cat(system.time(stochrickvect())[[3]],"\n")
+**********************************************************************
+
+Testing Vectorize2.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+In R, the original vectorized Stochastic Ricker takes: 
+0.229 
+In R, the modified vectorized Stochastic Ricker takes: 
+0.198 
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.67020s
+
+======================================================================
+Inspecting script file CompareSpeed.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/sh
+# Author: Electric Emus (dongxuan.zhu22@imperial.ac.uk, f.ferreira22@imperial.ac.uk, 
+#                        amy.feakes22@imperial.ac.uk, zitong.zhao22@imperial.ac.uk,
+#                        xuanyin.zheng22@imperial.ac.uk)
+# Script: CompareSpeed.sh
+# Desc: Compare execution speed for four vectorization scripts inc. detailed functions.
+# Arguments: none
+# Date: Dec 2022
+
+echo "\nSummary:"
+echo "\n The Vectorize1.py script takes:"
+time python3 Vectorize1.py > ../results/CompareVect.txt 
+echo "\n The Vectorize1.R script takes:"
+time Rscript Vectorize1.R  >> ../results/CompareVect.txt 
+python3 Vectorize1.py
+Rscript Vectorize1.R
+echo "\n The Vectorize2.py script takes:"
+time python3 Vectorize2.py >> ../results/CompareVect.txt 
+echo "\n The Vectorize2.R script takes:"
+time Rscript Vectorize2.R >> ../results/CompareVect.txt 
+python3 Vectorize2.py 
+Rscript Vectorize2.R 
+
+**********************************************************************
+
+Testing CompareSpeed.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+\nSummary:
+\n The Vectorize1.py script takes:
+\n The Vectorize1.R script takes:
+
+In python, the sum function using loop takes:
+0.15639729902613908
+In python, the sum function with in-built vectorization takes:
+0.0005465949652716517
+
+In R, the sum function using loop takes: 
+0.067 
+In R, the sum function with in-built vectorization takes: 
+0.001 
+\n The Vectorize2.py script takes:
+\n The Vectorize2.R script takes:
+
+In python, the original vectorized stochastic Ricker function takes:
+0.622984614979
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+
+real	0m0.305s
+user	0m0.580s
+sys	0m0.276s
+
+real	0m0.314s
+user	0m0.538s
+sys	0m0.327s
+
+real	0m1.193s
+user	0m1.407s
+sys	0m0.337s
+
+real	0m0.643s
+user	0m0.807s
+sys	0m0.382s
+
+======================================================================
+Inspecting script file TestR.R...
+
+File contents are:
+
+**********************************************************************
+print("Hello, this is R!")
+**********************************************************************
+
+Testing TestR.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Hello, this is R!"
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.17898s
+
+======================================================================
+Inspecting script file Vectorize1.R...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/Rscript
+
+# Script: Vectorize1.R
+# Author: Electric Emus (dongxuan.zhu22@imperial.ac.uk, f.ferreira22@imperial.ac.uk, 
+#                        amy.feakes22@imperial.ac.uk, zitong.zhao22@imperial.ac.uk,
+#                        xuanyin.zheng22@imperial.ac.uk)
+# Description: Practical work with vectorisation
+# Date: Oct 2022
+
+M <- matrix(runif(1000000), 1000, 1000)
+
+SumAllElements <- function(M) {
+    Dimensions <- dim(M)
+    Tot <- 0
+    for (i in 1:Dimensions[1]) {
+        for (j in 1:Dimensions[2]) {
+            Tot <- Tot + M[i,j]
+        }
+    }
+    return (Tot)
+}
+
+cat("\nIn R, the sum function using loop takes: \n")
+cat(system.time(SumAllElements(M))[[3]],"\n")
+
+cat("In R, the sum function with in-built vectorization takes: \n")
+cat(system.time(sum(M))[[3]],"\n")
+**********************************************************************
+
+Testing Vectorize1.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+In R, the sum function using loop takes: 
+0.069 
+In R, the sum function with in-built vectorization takes: 
+0.001 
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.32153s
+
+======================================================================
+Inspecting script file timeitme.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+'''loops vs. list comprehensions: which is faster?'''
+##############################################################################
+# loops vs. list comprehensions: which is faster?
+##############################################################################
+
+iters = 1000000
+
+import timeit
+
+from profileme import my_squares as my_squares_loops
+
+from profileme2 import my_squares as my_squares_lc
+
+##############################################################################
+# loops vs. the join method for strings: which is faster?
+##############################################################################
+
+mystring = "my string"
+
+from profileme import my_join as my_join_join
+
+from profileme2 import my_join as my_join
+
+
+
+import time
+start = time.time()
+my_squares_loops(iters)
+print(f"my_squares_loops takes {time.time() - start} s to run.")
+
+start = time.time()
+my_squares_lc(iters)
+print(f"my_squares_lc takes {time.time() - start} s to run.")
+
+**********************************************************************
+
+Testing timeitme.py...
+
+timeitme.py is a Python script file;
+
+checking for docstrings...
+
+No functions, but no script-level docstring either
+2 pts deducted
+
+Current Points = 83.0
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+10000000 My string
+10000000 My string
+my_squares_loops takes 0.24788498878479004 s to run.
+my_squares_lc takes 0.22719240188598633 s to run.
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 8.61461s
+
+======================================================================
+======================================================================
+Finished running scripts
+
+Ran into 3 errors
+
+======================================================================
+======================================================================
+
+FINISHED WEEKLY ASSESSMENT
+
+Current Points for the Week = 83.0
+
+NOTE THAT THESE ARE POINTS, NOT MARKS FOR THE WEEK!
